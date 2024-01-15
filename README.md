@@ -4,10 +4,13 @@ SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
 SPDX-License-Identifier: CC0-1.0
 -->
 
-rdfconvert
-==========
+# `rdfconvert`
 
-A little python script that converts files and whole directory trees from one RDF serialization into another.
+A little python script/CLI tool that converts files
+and whole directory trees
+from one RDF serialization into another.
+
+## Usage
 
 ```
 usage: rdfconvert.py [-h] --from
