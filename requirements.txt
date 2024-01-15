@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+rdflib==6.1.1
