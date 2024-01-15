@@ -4,6 +4,8 @@ Description  : A little python script that converts files and whole directory tr
 Author       : Wim Pessemier
 Contact      : w**.p********@ster.kuleuven.be (replace *)
 Organization : Institute of Astronomy, KU Leuven
+SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
+SPDX-License-Identifier: BSD-3-Clause
 """
 
 from rdflib import Graph, plugin

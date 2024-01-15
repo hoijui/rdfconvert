@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 rdfconvert
 ==========
 
