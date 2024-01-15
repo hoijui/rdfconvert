@@ -6,6 +6,13 @@ SPDX-License-Identifier: CC0-1.0
 
 # `rdfconvert`
 
+[![License: BSD-3-Clause](
+    https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](
+    LICENSE.txt)
+[![REUSE status](
+    https://api.reuse.software/badge/github.com/hoijui/rdfconvert)](
+    https://api.reuse.software/info/github.com/hoijui/rdfconvert)
+
 A little python script/CLI tool that converts files
 and whole directory trees
 from one RDF serialization into another.
