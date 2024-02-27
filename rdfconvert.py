@@ -20,7 +20,6 @@ import fnmatch
 plugin.register("rdf-json", Parser    , "rdflib_rdfjson.rdfjson_parser"    , "RdfJsonParser")
 plugin.register("rdf-json", Serializer, "rdflib_rdfjson.rdfjson_serializer", "RdfJsonSerializer")
 
-
 INPUT_FORMAT_TO_EXTENSIONS = { "application/rdf+xml" : [".xml", ".rdf", ".owl"],
                                "text/html"           : [".html"],
                                "xml"                 : [".xml", ".rdf", ".owl"],
@@ -52,7 +51,6 @@ convert individual files or even whole directory trees at once
 (with or without preserving the directory tree structure).
     """
 
-
 # a function that returns additional help as a string
 def epilog():
     s = "Default extensions for INPUT format:\n"
@@ -63,7 +61,6 @@ def epilog():
     for ouptutFormat, extension in OUTPUT_FORMAT_TO_EXTENSION.items():
         s += " - %s : '%s'\n" %(ouptutFormat.ljust(10), extension)
     return s
-
 
 if __name__ == "__main__":
 
@@ -179,19 +176,15 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-
     # a simple function to log verbose info
     def VERBOSE(msg):
         if args.verbose:
             print(msg)
 
-
-
     # process each input file sequentially:
     for inputFileOrDir in args.INPUT:
 
         VERBOSE("Now processing input file or directory '%s'" %inputFileOrDir)
-
 
         # check if the file exists, and if it's a directory or a file
         isdir = False
@@ -312,7 +305,3 @@ if __name__ == "__main__":
                     else:
                         g.serialize(outputAbsFileName, format=args.TO)
                         VERBOSE(" - file '%s' has been written" %outputAbsFileName)
-
-
-
-
