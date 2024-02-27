@@ -42,10 +42,10 @@ usage: rdfconvert.py [-h] --from
 
 Convert one RDF serialization into another.
 
-This script allows you to convert several files at once. It can 
-convert individual files or even whole directory trees at once 
+This script allows you to convert several files at once. It can
+convert individual files or even whole directory trees at once
 (with or without preserving the directory tree structure).
-    
+
 
 positional arguments:
   INPUT                 A list of input files or input directories. When
