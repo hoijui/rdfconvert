@@ -19,7 +19,7 @@ from one RDF serialization into another.
 
 ## Usage
 
-```
+```text
 usage: rdfconvert.py [-h] --from
                      {json-ld,trix,ttl,application/rdf+xml,nquads,xml,text/html,rdf-json,rdfa,n3,nt}
                      [--from-ext FROM_EXT [FROM_EXT ...]] [-R]
