@@ -17,6 +17,18 @@ A little python script/CLI tool that converts files
 and whole directory trees
 from one RDF serialization into another.
 
+## Installation
+
+```shell
+pip install -r requirements.txt
+```
+
+test:
+
+```shell
+./rdfconvert.py -h
+```
+
 ## Usage
 
 ```text
