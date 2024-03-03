@@ -9,13 +9,14 @@ SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
 SPDX-License-Identifier: BSD-3-Clause
 """
 
+import argparse
+import fnmatch
+import os
+import sys
+
 from rdflib import Graph, plugin
 from rdflib.parser import Parser
 from rdflib.serializer import Serializer
-import sys
-import os
-import argparse
-import fnmatch
 
 plugin.register("rdf-json", Parser    , "rdflib_rdfjson.rdfjson_parser"    , "RdfJsonParser")
 plugin.register("rdf-json", Serializer, "rdflib_rdfjson.rdfjson_serializer", "RdfJsonSerializer")
