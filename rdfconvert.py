@@ -201,7 +201,7 @@ if __name__ == "__main__":
             else:
                 VERBOSE(f" - '{inputFileOrDir}' exists and is a file")
         else:
-            sys.exit(f"!!! ERROR: Input file '{inputFileOrDir}' was not found !!!")
+            sys.exit(f"ERROR: Input file '{inputFileOrDir}' was not found!")
 
         VERBOSE(f" - Input format: {args.FROM}")
         VERBOSE(f" - Output format: {args.TO}")
@@ -254,7 +254,7 @@ if __name__ == "__main__":
                 print(output)
             # if an output directory was provided, but it doesn't exist, then exit the script
             elif not os.path.exists(args.OUTPUTDIR):
-                sys.exit(f"!!! ERROR: Output dir '{args.OUTPUTDIR}' was not found !!!")
+                sys.exit(f"ERROR: Output dir '{args.OUTPUTDIR}' was not found!")
             # if the output directory was given and it exists, then figure out the output filename
             # and write the output to disk
             else:
@@ -280,7 +280,7 @@ if __name__ == "__main__":
 
                 # for safety, check that we're not overwriting the input file
                 if outputAbsFileName == os.path.abspath(inputFile):
-                    sys.exit(f"!!! ERROR: Input file '{outputAbsFileName}' is the same as output file !!!")
+                    sys.exit(f"ERROR: Input file '{outputAbsFileName}' is the same as output file!")
                 else:
                     VERBOSE(" - this file is different from the input filename")
 
