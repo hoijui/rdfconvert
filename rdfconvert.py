@@ -60,11 +60,11 @@ convert individual files or even whole directory trees at once
 def epilog():
     s = "Default extensions for INPUT format:\n"
     for inputFormat, extensions in INPUT_FORMAT_TO_EXTENSIONS.items():
-        s += " - %s : %s\n" %(inputFormat.ljust(19), extensions)
+        s += f" - {inputFormat.ljust(19)} : {extensions}\n"
     s += "\n"
     s += "Default extension for OUTPUT format:\n"
     for ouptutFormat, extension in OUTPUT_FORMAT_TO_EXTENSION.items():
-        s += " - %s : '%s'\n" %(ouptutFormat.ljust(10), extension)
+        s += f" - {ouptutFormat.ljust(10)} : '{extension}'\n"
     return s
 
 if __name__ == "__main__":
@@ -189,22 +189,22 @@ if __name__ == "__main__":
     # process each input file sequentially:
     for inputFileOrDir in args.INPUT:
 
-        VERBOSE("Now processing input file or directory '%s'" %inputFileOrDir)
+        VERBOSE(f"Now processing input file or directory '{inputFileOrDir}'")
 
         # check if the file exists, and if it's a directory or a file
         isdir = False
         if os.path.exists(inputFileOrDir):
             if os.path.isdir(inputFileOrDir):
-                VERBOSE(" - '%s' exists and is a directory" %inputFileOrDir)
+                VERBOSE(f" - '{inputFileOrDir}' exists and is a directory")
                 inputFileOrDir = os.path.abspath(inputFileOrDir)
                 isdir = True
             else:
-                VERBOSE(" - '%s' exists and is a file" %inputFileOrDir)
+                VERBOSE(f" - '{inputFileOrDir}' exists and is a file")
         else:
-            sys.exit("!!! ERROR: Input file '%s' was not found !!!" %inputFileOrDir)
+            sys.exit(f"!!! ERROR: Input file '{inputFileOrDir}' was not found !!!")
 
-        VERBOSE(" - Input format: %s" %args.FROM)
-        VERBOSE(" - Output format: %s" %args.TO)
+        VERBOSE(f" - Input format: {args.FROM}")
+        VERBOSE(f" - Output format: {args.TO}")
 
         # find out which extensions we should match
         if args.FROM_EXT:
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         else:
             inputExtensions = INPUT_FORMAT_TO_EXTENSIONS[args.FROM]
 
-        VERBOSE(" - Input extensions: %s" %inputExtensions)
+        VERBOSE(f" - Input extensions: {inputExtensions}")
 
         # find out which output extension we should write
         if args.TO_EXT:
@@ -220,17 +220,17 @@ if __name__ == "__main__":
         else:
             outputExtension = OUTPUT_FORMAT_TO_EXTENSION[args.TO]
 
-        VERBOSE(" - Output extension: '%s'" %outputExtension)
+        VERBOSE(f" - Output extension: '{outputExtension}'")
 
         inputFiles = []
 
         if isdir:
-            VERBOSE(" - Now walking the directory (recursive = %s):" %args.recursive)
+            VERBOSE(f" - Now walking the directory (recursive = {args.recursive}):")
             for root, dirnames, filenames in os.walk(inputFileOrDir):
-                VERBOSE("   * Finding files in '%s'" %root)
+                VERBOSE(f"   * Finding files in '{root}'")
                 for extension in inputExtensions:
-                    for filename in fnmatch.filter(filenames, "*%s" %extension):
-                        VERBOSE("     -> found '%s'" %filename)
+                    for filename in fnmatch.filter(filenames, f"*{extension}"):
+                        VERBOSE(f"     -> found '{filename}'")
                         inputFiles.append(os.path.join(root, filename))
                 if not args.recursive:
                     break
@@ -254,34 +254,33 @@ if __name__ == "__main__":
                 print(output)
             # if an output directory was provided, but it doesn't exist, then exit the script
             elif not os.path.exists(args.OUTPUTDIR):
-                sys.exit("!!! ERROR: Output dir '%s' was not found !!!" %args.OUTPUTDIR)
+                sys.exit(f"!!! ERROR: Output dir '{args.OUTPUTDIR}' was not found !!!")
             # if the output directory was given and it exists, then figure out the output filename
             # and write the output to disk
             else:
                 head, tail = os.path.split(inputFile)
-                VERBOSE(" - head, tail: %s, %s" %(head, tail))
+                VERBOSE(f" - head, tail: {head}, {tail}")
                 if args.no_tree:
                     outputAbsPath = os.path.abspath(args.OUTPUTDIR)
                 else:
                     # remove the common prefix from the head and the input directory
                     # (otherwise the given input path will also be added to the output path)
                     commonPrefix = os.path.commonprefix([head, inputFileOrDir])
-                    VERBOSE(" - inputFileOrDir: %s" %inputFileOrDir)
-                    VERBOSE(" - common prefix: %s" %commonPrefix)
+                    VERBOSE(f" - inputFileOrDir: {inputFileOrDir}")
+                    VERBOSE(f" - common prefix: {commonPrefix}")
                     headWithoutCommonPrefix = head[len(commonPrefix)+1:]
-                    VERBOSE(" - head without common prefix: %s" %headWithoutCommonPrefix)
+                    VERBOSE(f" - head without common prefix: {headWithoutCommonPrefix}")
                     outputAbsPath = os.path.join(os.path.abspath(args.OUTPUTDIR),
                                                  headWithoutCommonPrefix)
-                    VERBOSE(" - output absolute path: %s" %outputAbsPath)
+                    VERBOSE(f" - output absolute path: {outputAbsPath}")
                 outputFileName = os.path.splitext(tail)[0] + outputExtension
                 outputAbsFileName = os.path.join(outputAbsPath, outputFileName)
 
-                VERBOSE(" - output filename: '%s'" %outputAbsFileName)
+                VERBOSE(f" - output filename: '{outputAbsFileName}'")
 
                 # for safety, check that we're not overwriting the input file
                 if outputAbsFileName == os.path.abspath(inputFile):
-                    sys.exit("!!! ERROR: Input file '%s' is the same as output file !!!" \
-                             %outputAbsFileName)
+                    sys.exit(f"!!! ERROR: Input file '{outputAbsFileName}' is the same as output file !!!")
                 else:
                     VERBOSE(" - this file is different from the input filename")
 
@@ -290,7 +289,7 @@ if __name__ == "__main__":
                 # then ask for permission to overwrite the file
                 skipThisFile = False
                 if not args.force and os.path.exists(outputAbsFileName):
-                    yesOrNo = raw_input("Overwrite %s? (y/n): " %outputAbsFileName)
+                    yesOrNo = raw_input(f"Overwrite {outputAbsFileName}? (y/n): ")
                     if yesOrNo.lower() not in ["y", "yes"]:
                         skipThisFile = True
 
@@ -300,13 +299,13 @@ if __name__ == "__main__":
                     dirName = os.path.dirname(outputAbsFileName)
                     if not os.path.exists(dirName):
                         if args.simulate:
-                            print("Simulation: this directory tree would be written: %s" %dirName)
+                            print(f"Simulation: this directory tree would be written: {dirName}")
                         else:
-                            VERBOSE(" - Now creating %s since it does not exist yet" %dirName)
+                            VERBOSE(f" - Now creating {dirName} since it does not exist yet")
                             os.makedirs(dirName)
 
                     if args.simulate:
-                        print("Simulation: this file would be written: %s" %outputAbsFileName)
+                        print(f"Simulation: this file would be written: {outputAbsFileName}")
                     else:
                         g.serialize(outputAbsFileName, format=args.TO)
-                        VERBOSE(" - file '%s' has been written" %outputAbsFileName)
+                        VERBOSE(f" - file '{outputAbsFileName}' has been written")
