@@ -21,26 +21,30 @@ from rdflib.serializer import Serializer
 plugin.register("rdf-json", Parser    , "rdflib_rdfjson.rdfjson_parser"    , "RdfJsonParser")
 plugin.register("rdf-json", Serializer, "rdflib_rdfjson.rdfjson_serializer", "RdfJsonSerializer")
 
-INPUT_FORMAT_TO_EXTENSIONS = { "application/rdf+xml" : [".xml", ".rdf", ".owl"],
-                               "text/html"           : [".html"],
-                               "xml"                 : [".xml", ".rdf", ".owl"],
-                               "rdf-json"            : [".json"],
-                               "json-ld"             : [".jsonld", ".json-ld"],
-                               "ttl"                 : [".ttl"],
-                               "nt"                  : [".nt"],
-                               "nquads"              : [".nq"],
-                               "trix"                : [".xml", ".trix"],
-                               "rdfa"                : [".xhtml", ".html"],
-                               "n3"                  : [".n3"]                 }
-OUTPUT_FORMAT_TO_EXTENSION = { "xml"        : ".xml",
-                               "pretty-xml" : ".xml",
-                               "rdf-json"   : ".json",
-                               "json-ld"    : ".jsonld",
-                               "nt"         : ".nt",
-                               "nquads"     : ".nq",
-                               "trix"       : ".xml",
-                               "ttl"        : ".ttl",
-                               "n3"         : ".n3"                   }
+INPUT_FORMAT_TO_EXTENSIONS = {
+    "application/rdf+xml" : [".xml", ".rdf", ".owl"],
+    "text/html"           : [".html"],
+    "xml"                 : [".xml", ".rdf", ".owl"],
+    "rdf-json"            : [".json"],
+    "json-ld"             : [".jsonld", ".json-ld"],
+    "ttl"                 : [".ttl"],
+    "nt"                  : [".nt"],
+    "nquads"              : [".nq"],
+    "trix"                : [".xml", ".trix"],
+    "rdfa"                : [".xhtml", ".html"],
+    "n3"                  : [".n3"]
+    }
+OUTPUT_FORMAT_TO_EXTENSION = {
+    "xml"        : ".xml",
+    "pretty-xml" : ".xml",
+    "rdf-json"   : ".json",
+    "json-ld"    : ".jsonld",
+    "nt"         : ".nt",
+    "nquads"     : ".nq",
+    "trix"       : ".xml",
+    "ttl"        : ".ttl",
+    "n3"         : ".n3"
+    }
 
 # a function that returns the script description as a string
 def description():
