@@ -235,7 +235,7 @@ def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, inpu
             # then ask for permission to overwrite the file
             skip_this_file = False
             if not args.force and os.path.exists(output_abs_file_name):
-                yes_or_no = raw_input(f"Overwrite {output_abs_file_name}? (y/n): ")
+                yes_or_no = input(f"Overwrite {output_abs_file_name}? (y/n): ")
                 if yes_or_no.lower() not in ["y", "yes"]:
                     skip_this_file = True
 
