@@ -182,6 +182,23 @@ def parse_args():
 
     return args
 
+def get_output_abs_path(verbose, args, input_file_or_dir, head):
+    if args.no_tree:
+        output_abs_path = os.path.abspath(args.OUTPUTDIR)
+    else:
+        # remove the common prefix from the head and the input directory
+        # (otherwise the given input path will also be added to the output path)
+        common_prefix = os.path.commonprefix([head, input_file_or_dir])
+        verbose(f" - input file or dir: {input_file_or_dir}")
+        verbose(f" - common prefix: {common_prefix}")
+        head_without_common_prefix = head[len(common_prefix)+1:]
+        verbose(f" - head without common prefix: {head_without_common_prefix}")
+        output_abs_path = os.path.join(os.path.abspath(args.OUTPUTDIR),
+                                        head_without_common_prefix)
+        verbose(f" - output absolute path: {output_abs_path}")
+
+    return output_abs_path
+
 def process_input_files(verbose, args, input_file_or_dir, output_extension, input_files):
     """
     Creates the graph, and parse the input files
@@ -207,19 +224,7 @@ def process_input_files(verbose, args, input_file_or_dir, output_extension, inpu
         else:
             head, tail = os.path.split(input_file)
             verbose(f" - head, tail: {head}, {tail}")
-            if args.no_tree:
-                output_abs_path = os.path.abspath(args.OUTPUTDIR)
-            else:
-                # remove the common prefix from the head and the input directory
-                # (otherwise the given input path will also be added to the output path)
-                common_prefix = os.path.commonprefix([head, input_file_or_dir])
-                verbose(f" - input file or dir: {input_file_or_dir}")
-                verbose(f" - common prefix: {common_prefix}")
-                head_without_common_prefix = head[len(common_prefix)+1:]
-                verbose(f" - head without common prefix: {head_without_common_prefix}")
-                output_abs_path = os.path.join(os.path.abspath(args.OUTPUTDIR),
-                                                head_without_common_prefix)
-                verbose(f" - output absolute path: {output_abs_path}")
+            output_abs_path = get_output_abs_path(verbose, args, input_file_or_dir, head)
             output_file_name = os.path.splitext(tail)[0] + output_extension
             output_abs_file_name = os.path.join(output_abs_path, output_file_name)
 
