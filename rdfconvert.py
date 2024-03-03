@@ -269,6 +269,25 @@ def main():
         if args.verbose:
             print(msg)
 
+    verbose(f" - Input format: {args.FROM}")
+    verbose(f" - Output format: {args.TO}")
+
+    # find out which extensions we should match
+    if args.FROM_EXT:
+        input_extensions = args.FROM_EXT
+    else:
+        input_extensions = INPUT_FORMAT_TO_EXTENSIONS[args.FROM]
+
+    verbose(f" - Input extensions: {input_extensions}")
+
+    # find out which output extension we should write
+    if args.TO_EXT:
+        output_extension = args.TO_EXT
+    else:
+        output_extension = OUTPUT_FORMAT_TO_EXTENSION[args.TO]
+
+    verbose(f" - Output extension: '{output_extension}'")
+
     # process each input file sequentially:
     for input_file_or_dir in args.INPUT:
 
@@ -285,25 +304,6 @@ def main():
                 verbose(f" - '{input_file_or_dir}' exists and is a file")
         else:
             sys.exit(f"ERROR: Input file '{input_file_or_dir}' was not found!")
-
-        verbose(f" - Input format: {args.FROM}")
-        verbose(f" - Output format: {args.TO}")
-
-        # find out which extensions we should match
-        if args.FROM_EXT:
-            input_extensions = args.FROM_EXT
-        else:
-            input_extensions = INPUT_FORMAT_TO_EXTENSIONS[args.FROM]
-
-        verbose(f" - Input extensions: {input_extensions}")
-
-        # find out which output extension we should write
-        if args.TO_EXT:
-            output_extension = args.TO_EXT
-        else:
-            output_extension = OUTPUT_FORMAT_TO_EXTENSION[args.TO]
-
-        verbose(f" - Output extension: '{output_extension}'")
 
         input_files = []
 
