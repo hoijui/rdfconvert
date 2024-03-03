@@ -67,8 +67,7 @@ def epilog():
         s += f" - {ouptutFormat.ljust(10)} : '{extension}'\n"
     return s
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser(formatter_class = argparse.RawDescriptionHelpFormatter,
                                      description     = description(),
                                      epilog          = epilog())
@@ -309,3 +308,6 @@ if __name__ == "__main__":
                     else:
                         g.serialize(outputAbsFileName, format=args.TO)
                         VERBOSE(f" - file '{outputAbsFileName}' has been written")
+
+if __name__ == "__main__":
+    main()
