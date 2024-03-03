@@ -176,13 +176,13 @@ def parse_args():
                         action="store_const",
                         const=True,
                         default=False,
-                        help="Verbosely print some debugging info.")
+                        help="verbosely print some debugging info.")
 
     args = parser.parse_args()
 
     return args
 
-def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, input_files):
+def process_input_files(verbose, args, input_file_or_dir, output_extension, input_files):
     """
     Creates the graph, and parse the input files
     """
@@ -192,12 +192,12 @@ def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, inpu
         g = Graph()
         g.parse(input_file, format=args.FROM)
 
-        VERBOSE(" - the graph was parsed successfully")
+        verbose(" - the graph was parsed successfully")
 
         # if no output directory is specified, just print the output to the stdout
         if args.OUTPUTDIR is None:
             output = g.serialize(None, format=args.TO)
-            VERBOSE(" - output:")
+            verbose(" - output:")
             print(output)
         # if an output directory was provided, but it doesn't exist, then exit the script
         elif not os.path.exists(args.OUTPUTDIR):
@@ -206,30 +206,30 @@ def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, inpu
         # and write the output to disk
         else:
             head, tail = os.path.split(input_file)
-            VERBOSE(f" - head, tail: {head}, {tail}")
+            verbose(f" - head, tail: {head}, {tail}")
             if args.no_tree:
                 output_abs_path = os.path.abspath(args.OUTPUTDIR)
             else:
                 # remove the common prefix from the head and the input directory
                 # (otherwise the given input path will also be added to the output path)
                 common_prefix = os.path.commonprefix([head, input_file_or_dir])
-                VERBOSE(f" - input file or dir: {input_file_or_dir}")
-                VERBOSE(f" - common prefix: {common_prefix}")
+                verbose(f" - input file or dir: {input_file_or_dir}")
+                verbose(f" - common prefix: {common_prefix}")
                 head_without_common_prefix = head[len(common_prefix)+1:]
-                VERBOSE(f" - head without common prefix: {head_without_common_prefix}")
+                verbose(f" - head without common prefix: {head_without_common_prefix}")
                 output_abs_path = os.path.join(os.path.abspath(args.OUTPUTDIR),
                                                 head_without_common_prefix)
-                VERBOSE(f" - output absolute path: {output_abs_path}")
+                verbose(f" - output absolute path: {output_abs_path}")
             output_file_name = os.path.splitext(tail)[0] + output_extension
             output_abs_file_name = os.path.join(output_abs_path, output_file_name)
 
-            VERBOSE(f" - output filename: '{output_abs_file_name}'")
+            verbose(f" - output filename: '{output_abs_file_name}'")
 
             # for safety, check that we're not overwriting the input file
             if output_abs_file_name == os.path.abspath(input_file):
                 sys.exit(f"ERROR: Input file '{output_abs_file_name}' is the same as output file!")
             else:
-                VERBOSE(" - this file is different from the input filename")
+                verbose(" - this file is different from the input filename")
 
             # if the output file exists already and the "force" flag is not set,
             # then ask for permission to overwrite the file
@@ -240,49 +240,49 @@ def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, inpu
                     skip_this_file = True
 
             if skip_this_file:
-                VERBOSE(" - this file will be skipped")
+                verbose(" - this file will be skipped")
             else:
                 dir_name = os.path.dirname(output_abs_file_name)
                 if not os.path.exists(dir_name):
                     if args.simulate:
                         print(f"Simulation: this directory tree would be written: {dir_name}")
                     else:
-                        VERBOSE(f" - Now creating {dir_name} since it does not exist yet")
+                        verbose(f" - Now creating {dir_name} since it does not exist yet")
                         os.makedirs(dir_name)
 
                 if args.simulate:
                     print(f"Simulation: this file would be written: {output_abs_file_name}")
                 else:
                     g.serialize(output_abs_file_name, format=args.TO)
-                    VERBOSE(f" - file '{output_abs_file_name}' has been written")
+                    verbose(f" - file '{output_abs_file_name}' has been written")
 
 def main():
     args = parse_args()
 
     # a simple function to log verbose info
-    def VERBOSE(msg):
+    def verbose(msg):
         if args.verbose:
             print(msg)
 
     # process each input file sequentially:
     for input_file_or_dir in args.INPUT:
 
-        VERBOSE(f"Now processing input file or directory '{input_file_or_dir}'")
+        verbose(f"Now processing input file or directory '{input_file_or_dir}'")
 
         # check if the file exists, and if it's a directory or a file
         isdir = False
         if os.path.exists(input_file_or_dir):
             if os.path.isdir(input_file_or_dir):
-                VERBOSE(f" - '{input_file_or_dir}' exists and is a directory")
+                verbose(f" - '{input_file_or_dir}' exists and is a directory")
                 input_file_or_dir = os.path.abspath(input_file_or_dir)
                 isdir = True
             else:
-                VERBOSE(f" - '{input_file_or_dir}' exists and is a file")
+                verbose(f" - '{input_file_or_dir}' exists and is a file")
         else:
             sys.exit(f"ERROR: Input file '{input_file_or_dir}' was not found!")
 
-        VERBOSE(f" - Input format: {args.FROM}")
-        VERBOSE(f" - Output format: {args.TO}")
+        verbose(f" - Input format: {args.FROM}")
+        verbose(f" - Output format: {args.TO}")
 
         # find out which extensions we should match
         if args.FROM_EXT:
@@ -290,7 +290,7 @@ def main():
         else:
             input_extensions = INPUT_FORMAT_TO_EXTENSIONS[args.FROM]
 
-        VERBOSE(f" - Input extensions: {input_extensions}")
+        verbose(f" - Input extensions: {input_extensions}")
 
         # find out which output extension we should write
         if args.TO_EXT:
@@ -298,17 +298,17 @@ def main():
         else:
             output_extension = OUTPUT_FORMAT_TO_EXTENSION[args.TO]
 
-        VERBOSE(f" - Output extension: '{output_extension}'")
+        verbose(f" - Output extension: '{output_extension}'")
 
         input_files = []
 
         if isdir:
-            VERBOSE(f" - Now walking the directory (recursive = {args.recursive}):")
+            verbose(f" - Now walking the directory (recursive = {args.recursive}):")
             for root, dirnames, filenames in os.walk(input_file_or_dir):
-                VERBOSE(f"   * Finding files in '{root}'")
+                verbose(f"   * Finding files in '{root}'")
                 for extension in input_extensions:
                     for filename in fnmatch.filter(filenames, f"*{extension}"):
-                        VERBOSE(f"     -> found '{filename}'")
+                        verbose(f"     -> found '{filename}'")
                         input_files.append(os.path.join(root, filename))
                 if not args.recursive:
                     break
@@ -316,7 +316,7 @@ def main():
         else:
             input_files.append(input_file_or_dir)
 
-        process_input_files(VERBOSE, args, input_file_or_dir, output_extension, input_files)
+        process_input_files(verbose, args, input_file_or_dir, output_extension, input_files)
 
 if __name__ == "__main__":
     main()
