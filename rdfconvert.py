@@ -182,6 +182,80 @@ def parse_args():
 
     return args
 
+def process_input_files(VERBOSE, args, input_file_or_dir, output_extension, input_files):
+    """
+    Creates the graph, and parse the input files
+    """
+
+    for input_file in input_files:
+
+        g = Graph()
+        g.parse(input_file, format=args.FROM)
+
+        VERBOSE(" - the graph was parsed successfully")
+
+        # if no output directory is specified, just print the output to the stdout
+        if args.OUTPUTDIR is None:
+            output = g.serialize(None, format=args.TO)
+            VERBOSE(" - output:")
+            print(output)
+        # if an output directory was provided, but it doesn't exist, then exit the script
+        elif not os.path.exists(args.OUTPUTDIR):
+            sys.exit(f"ERROR: Output dir '{args.OUTPUTDIR}' was not found!")
+        # if the output directory was given and it exists, then figure out the output filename
+        # and write the output to disk
+        else:
+            head, tail = os.path.split(input_file)
+            VERBOSE(f" - head, tail: {head}, {tail}")
+            if args.no_tree:
+                output_abs_path = os.path.abspath(args.OUTPUTDIR)
+            else:
+                # remove the common prefix from the head and the input directory
+                # (otherwise the given input path will also be added to the output path)
+                common_prefix = os.path.commonprefix([head, input_file_or_dir])
+                VERBOSE(f" - input file or dir: {input_file_or_dir}")
+                VERBOSE(f" - common prefix: {common_prefix}")
+                head_without_common_prefix = head[len(common_prefix)+1:]
+                VERBOSE(f" - head without common prefix: {head_without_common_prefix}")
+                output_abs_path = os.path.join(os.path.abspath(args.OUTPUTDIR),
+                                                head_without_common_prefix)
+                VERBOSE(f" - output absolute path: {output_abs_path}")
+            output_file_name = os.path.splitext(tail)[0] + output_extension
+            output_abs_file_name = os.path.join(output_abs_path, output_file_name)
+
+            VERBOSE(f" - output filename: '{output_abs_file_name}'")
+
+            # for safety, check that we're not overwriting the input file
+            if output_abs_file_name == os.path.abspath(input_file):
+                sys.exit(f"ERROR: Input file '{output_abs_file_name}' is the same as output file!")
+            else:
+                VERBOSE(" - this file is different from the input filename")
+
+            # if the output file exists already and the "force" flag is not set,
+            # then ask for permission to overwrite the file
+            skip_this_file = False
+            if not args.force and os.path.exists(output_abs_file_name):
+                yes_or_no = raw_input(f"Overwrite {output_abs_file_name}? (y/n): ")
+                if yes_or_no.lower() not in ["y", "yes"]:
+                    skip_this_file = True
+
+            if skip_this_file:
+                VERBOSE(" - this file will be skipped")
+            else:
+                dir_name = os.path.dirname(output_abs_file_name)
+                if not os.path.exists(dir_name):
+                    if args.simulate:
+                        print(f"Simulation: this directory tree would be written: {dir_name}")
+                    else:
+                        VERBOSE(f" - Now creating {dir_name} since it does not exist yet")
+                        os.makedirs(dir_name)
+
+                if args.simulate:
+                    print(f"Simulation: this file would be written: {output_abs_file_name}")
+                else:
+                    g.serialize(output_abs_file_name, format=args.TO)
+                    VERBOSE(f" - file '{output_abs_file_name}' has been written")
+
 def main():
     args = parse_args()
 
@@ -242,77 +316,7 @@ def main():
         else:
             input_files.append(input_file_or_dir)
 
-        # create the graph, and parse the input files
-
-        for input_file in input_files:
-
-            g = Graph()
-            g.parse(input_file, format=args.FROM)
-
-            VERBOSE(" - the graph was parsed successfully")
-
-            # if no output directory is specified, just print the output to the stdout
-            if args.OUTPUTDIR is None:
-                output = g.serialize(None, format=args.TO)
-                VERBOSE(" - output:")
-                print(output)
-            # if an output directory was provided, but it doesn't exist, then exit the script
-            elif not os.path.exists(args.OUTPUTDIR):
-                sys.exit(f"ERROR: Output dir '{args.OUTPUTDIR}' was not found!")
-            # if the output directory was given and it exists, then figure out the output filename
-            # and write the output to disk
-            else:
-                head, tail = os.path.split(input_file)
-                VERBOSE(f" - head, tail: {head}, {tail}")
-                if args.no_tree:
-                    output_abs_path = os.path.abspath(args.OUTPUTDIR)
-                else:
-                    # remove the common prefix from the head and the input directory
-                    # (otherwise the given input path will also be added to the output path)
-                    common_prefix = os.path.commonprefix([head, input_file_or_dir])
-                    VERBOSE(f" - input file or dir: {input_file_or_dir}")
-                    VERBOSE(f" - common prefix: {common_prefix}")
-                    head_without_common_prefix = head[len(common_prefix)+1:]
-                    VERBOSE(f" - head without common prefix: {head_without_common_prefix}")
-                    output_abs_path = os.path.join(os.path.abspath(args.OUTPUTDIR),
-                                                 head_without_common_prefix)
-                    VERBOSE(f" - output absolute path: {output_abs_path}")
-                output_file_name = os.path.splitext(tail)[0] + output_extension
-                output_abs_file_name = os.path.join(output_abs_path, output_file_name)
-
-                VERBOSE(f" - output filename: '{output_abs_file_name}'")
-
-                # for safety, check that we're not overwriting the input file
-                if output_abs_file_name == os.path.abspath(input_file):
-                    sys.exit(f"ERROR: Input file '{output_abs_file_name}' is the same as output file!")
-                else:
-                    VERBOSE(" - this file is different from the input filename")
-
-
-                # if the output file exists already and the "force" flag is not set,
-                # then ask for permission to overwrite the file
-                skip_this_file = False
-                if not args.force and os.path.exists(output_abs_file_name):
-                    yes_or_no = raw_input(f"Overwrite {output_abs_file_name}? (y/n): ")
-                    if yes_or_no.lower() not in ["y", "yes"]:
-                        skip_this_file = True
-
-                if skip_this_file:
-                    VERBOSE(" - this file will be skipped")
-                else:
-                    dir_name = os.path.dirname(output_abs_file_name)
-                    if not os.path.exists(dir_name):
-                        if args.simulate:
-                            print(f"Simulation: this directory tree would be written: {dir_name}")
-                        else:
-                            VERBOSE(f" - Now creating {dir_name} since it does not exist yet")
-                            os.makedirs(dir_name)
-
-                    if args.simulate:
-                        print(f"Simulation: this file would be written: {output_abs_file_name}")
-                    else:
-                        g.serialize(output_abs_file_name, format=args.TO)
-                        VERBOSE(f" - file '{output_abs_file_name}' has been written")
+        process_input_files(VERBOSE, args, input_file_or_dir, output_extension, input_files)
 
 if __name__ == "__main__":
     main()
