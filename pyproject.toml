@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Robin Vobruba <hoijui.quaero@gmail.com>
+# SPDX-License-Identifier: Unlicense
+
+[project]
+name = "rdfconvert"
+description = "An RDF serialization format conversion tool, written in Python."
+authors = [
+  {name = "Wim Pessemier", email = "wim.pessemier@ster.kuleuven.be"},
+  {name = "Robin Vobruba", email = "hoijui.quaero@gmail.com"},
+]
+dynamic = ["version"]
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = ["RDF", "serialization", "conversion", "Turtle", "JSON-LD", "RDF/XML"]
+requires-python = ">=3.9"
+dependencies = [
+  "rdflib>=7.0.0",
+]
+classifiers = [
+  "License :: OSI Approved :: BSD License",
+]
+
+[project.scripts]
+rdfconvert = "rdfconvert:main"
