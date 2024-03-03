@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
+SPDX-FileCopyrightText: 2013 Wim Pessemier <w**.p********@ster.kuleuven.be>
 
 SPDX-License-Identifier: CC0-1.0
 -->

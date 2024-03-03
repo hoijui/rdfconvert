@@ -5,7 +5,8 @@ Description  : Converts files and whole directory trees from one RDF serializati
 Author       : Wim Pessemier
 Contact      : w**.p********@ster.kuleuven.be (replace *)
 Organization : Institute of Astronomy, KU Leuven
-SPDX-FileCopyrightText: Wim Pessemier <w**.p********@ster.kuleuven.be>
+SPDX-FileCopyrightText: 2013 Wim Pessemier <w**.p********@ster.kuleuven.be>
+SPDX-FileCopyrightText: 2024 Robin Vobruba <hoijui.quaero@gmail.com>
 SPDX-License-Identifier: BSD-3-Clause
 """
 
