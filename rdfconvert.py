@@ -270,12 +270,12 @@ def main():
         verbose(f"Now processing input file or directory '{input_file_or_dir}'")
 
         # check if the file exists, and if it's a directory or a file
-        isdir = False
+        is_dir = False
         if os.path.exists(input_file_or_dir):
             if os.path.isdir(input_file_or_dir):
                 verbose(f" - '{input_file_or_dir}' exists and is a directory")
                 input_file_or_dir = os.path.abspath(input_file_or_dir)
-                isdir = True
+                is_dir = True
             else:
                 verbose(f" - '{input_file_or_dir}' exists and is a file")
         else:
@@ -302,7 +302,7 @@ def main():
 
         input_files = []
 
-        if isdir:
+        if is_dir:
             verbose(f" - Now walking the directory (recursive = {args.recursive}):")
             for root, dirnames, filenames in os.walk(input_file_or_dir):
                 verbose(f"   * Finding files in '{root}'")
