@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Project      : rdfconvert
-Description  : A little python script that converts files and whole directory trees from one RDF serialization into another.
+Description  : Converts files and whole directory trees from one RDF serialization into another.
 Author       : Wim Pessemier
 Contact      : w**.p********@ster.kuleuven.be (replace *)
 Organization : Institute of Astronomy, KU Leuven
