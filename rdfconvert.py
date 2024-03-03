@@ -67,7 +67,7 @@ def epilog():
         s += f" - {ouptut_format.ljust(10)} : '{extension}'\n"
     return s
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(formatter_class = argparse.RawDescriptionHelpFormatter,
                                      description     = description(),
                                      epilog          = epilog())
@@ -179,6 +179,11 @@ def main():
                         help="Verbosely print some debugging info.")
 
     args = parser.parse_args()
+
+    return args
+
+def main():
+    args = parse_args()
 
     # a simple function to log verbose info
     def VERBOSE(msg):
